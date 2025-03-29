@@ -15,7 +15,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<void>;
-  register: (username: string, email: string, password: string) => Promise<void>;
+  register: (username: string, email: string, password: string, firstName?: string, lastName?: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -54,10 +54,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const register = async (username: string, email: string, password: string) => {
+  const register = async (username: string, email: string, password: string, firstName?: string, lastName?: string) => {
     try {
       setLoading(true);
-      await api.auth.register({ username, email, password });
+      await api.auth.register({ 
+        username, 
+        email, 
+        password,
+        first_name: firstName || '',
+        last_name: lastName || ''
+      });
       toast.success("Registration successful. You can now log in.");
     } catch (error) {
       console.error("Registration error:", error);

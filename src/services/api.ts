@@ -38,12 +38,40 @@ interface Profile {
 
 // Helper to handle fetch errors
 const handleResponse = async (response: Response) => {
+  const contentType = response.headers.get("content-type");
+  const isJson = contentType && contentType.includes("application/json");
+  
   if (!response.ok) {
-    const error = await response.json().catch(() => {
-      return { message: response.statusText };
-    });
-    throw new Error(error.message || "An error occurred");
+    if (isJson) {
+      // Parse JSON error response
+      const errorData = await response.json();
+      // Django REST Framework often returns errors in this format
+      if (errorData.detail) {
+        throw new Error(errorData.detail);
+      } else if (typeof errorData === 'object') {
+        // Handle field-specific errors
+        const errorMessages = Object.entries(errorData)
+          .map(([field, errors]) => {
+            if (Array.isArray(errors)) {
+              return `${field}: ${errors.join(', ')}`;
+            }
+            return `${field}: ${errors}`;
+          })
+          .join('; ');
+        throw new Error(errorMessages);
+      }
+      throw new Error(JSON.stringify(errorData));
+    }
+    
+    // Non-JSON error
+    throw new Error(response.statusText || "An error occurred");
   }
+  
+  // Handle empty responses (like 204 No Content)
+  if (!isJson) {
+    return { success: true };
+  }
+  
   return response.json();
 };
 
@@ -70,6 +98,7 @@ export const api = {
 
     register: async (data: RegisterData) => {
       try {
+        console.log("Registering with data:", data);
         const response = await fetch(`${API_URL}/register/`, {
           method: "POST",
           headers: {

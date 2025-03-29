@@ -11,6 +11,8 @@ import { toast } from "sonner";
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +23,7 @@ const RegisterForm = () => {
     e.preventDefault();
     
     if (!username || !email || !password || !confirmPassword) {
-      toast.error("Please fill in all fields");
+      toast.error("Please fill in all required fields");
       return;
     }
     
@@ -32,7 +34,8 @@ const RegisterForm = () => {
     
     try {
       setIsLoading(true);
-      await register(username, email, password);
+      await register(username, email, password, firstName, lastName);
+      toast.success("Registration successful! Please log in");
       navigate("/login");
     } catch (error) {
       console.error("Registration error:", error);
@@ -51,7 +54,7 @@ const RegisterForm = () => {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="username">Username *</Label>
             <Input
               id="username"
               type="text"
@@ -60,10 +63,11 @@ const RegisterForm = () => {
               onChange={(e) => setUsername(e.target.value)}
               disabled={isLoading}
               className="bg-white/50"
+              required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Email *</Label>
             <Input
               id="email"
               type="email"
@@ -72,10 +76,37 @@ const RegisterForm = () => {
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
               className="bg-white/50"
+              required
             />
           </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="firstName">First Name</Label>
+              <Input
+                id="firstName"
+                type="text"
+                placeholder="First name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                disabled={isLoading}
+                className="bg-white/50"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input
+                id="lastName"
+                type="text"
+                placeholder="Last name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                disabled={isLoading}
+                className="bg-white/50"
+              />
+            </div>
+          </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Password *</Label>
             <Input
               id="password"
               type="password"
@@ -84,10 +115,11 @@ const RegisterForm = () => {
               onChange={(e) => setPassword(e.target.value)}
               disabled={isLoading}
               className="bg-white/50"
+              required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm Password</Label>
+            <Label htmlFor="confirm-password">Confirm Password *</Label>
             <Input
               id="confirm-password"
               type="password"
@@ -96,6 +128,7 @@ const RegisterForm = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               disabled={isLoading}
               className="bg-white/50"
+              required
             />
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
