@@ -1,6 +1,8 @@
 
 import { toast } from "sonner";
 
+// You can switch between real API and mock implementation
+const USE_MOCK_API = true;
 const API_URL = "http://localhost:8000/api";
 
 interface LoginData {
@@ -36,6 +38,10 @@ interface Profile {
   bio: string;
 }
 
+// Mock data for local development without backend
+const mockUsers: User[] = [];
+let currentUser: User | null = null;
+
 // Helper to handle fetch errors
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
@@ -47,7 +53,95 @@ const handleResponse = async (response: Response) => {
   return response.json();
 };
 
-export const api = {
+// Mock implementation for local development
+const mockAPI = {
+  auth: {
+    login: async (data: LoginData) => {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const user = mockUsers.find(u => u.username === data.username);
+      if (!user) {
+        throw new Error("Invalid credentials");
+      }
+      
+      currentUser = user;
+      return { user, message: "Login successful" };
+    },
+
+    register: async (data: RegisterData) => {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Check if username already exists
+      if (mockUsers.some(u => u.username === data.username)) {
+        throw new Error("Username already exists");
+      }
+      
+      // Create new user
+      const newUser: User = {
+        id: mockUsers.length + 1,
+        username: data.username,
+        email: data.email,
+        first_name: data.first_name || "",
+        last_name: data.last_name || ""
+      };
+      
+      mockUsers.push(newUser);
+      return { message: "Registration successful" };
+    },
+
+    logout: async () => {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      currentUser = null;
+      return { message: "Logged out successfully" };
+    },
+
+    getCurrentUser: async (): Promise<User | null> => {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      return currentUser;
+    },
+  },
+
+  profile: {
+    getProfile: async (): Promise<Profile | null> => {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      if (!currentUser) return null;
+      
+      return {
+        id: currentUser.id,
+        user: currentUser,
+        image: "https://via.placeholder.com/150",
+        bio: "This is a mock profile bio for testing purposes."
+      };
+    },
+
+    updateProfile: async (profileId: number, data: ProfileData): Promise<Profile> => {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      if (!currentUser) {
+        throw new Error("Not authenticated");
+      }
+      
+      return {
+        id: profileId,
+        user: currentUser,
+        image: "https://via.placeholder.com/150",
+        bio: data.bio || "Updated bio"
+      };
+    },
+  },
+};
+
+// Real API implementation
+const realAPI = {
   auth: {
     login: async (data: LoginData) => {
       try {
@@ -171,3 +265,6 @@ export const api = {
     },
   },
 };
+
+// Export the appropriate API implementation
+export const api = USE_MOCK_API ? mockAPI : realAPI;
