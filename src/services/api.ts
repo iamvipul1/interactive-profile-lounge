@@ -45,6 +45,8 @@ const handleResponse = async (response: Response) => {
     if (isJson) {
       // Parse JSON error response
       const errorData = await response.json();
+      console.log("Error data from server:", errorData);
+      
       // Django REST Framework often returns errors in this format
       if (errorData.detail) {
         throw new Error(errorData.detail);
@@ -137,7 +139,7 @@ export const api = {
         });
         
         if (!response.ok) {
-          if (response.status === 401) {
+          if (response.status === 401 || response.status === 403) {
             return null;
           }
           throw new Error("Failed to get current user");

@@ -16,11 +16,13 @@ const RegisterForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
     
     if (!username || !email || !password || !confirmPassword) {
       toast.error("Please fill in all required fields");
@@ -39,7 +41,8 @@ const RegisterForm = () => {
       navigate("/login");
     } catch (error) {
       console.error("Registration error:", error);
-      // Error is already handled in the API service
+      setErrorMessage(error instanceof Error ? error.message : "An unknown error occurred");
+      // Error is already handled in the API service with toast
     } finally {
       setIsLoading(false);
     }
@@ -53,6 +56,11 @@ const RegisterForm = () => {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {errorMessage && (
+            <div className="p-3 text-sm bg-red-50 border border-red-200 text-red-600 rounded-md">
+              {errorMessage}
+            </div>
+          )}
           <div className="space-y-2">
             <Label htmlFor="username">Username *</Label>
             <Input
