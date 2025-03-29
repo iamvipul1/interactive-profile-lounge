@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+
+{% block title %}Profile Lounge - Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron py-5">
+    <h1 class="display-4">Welcome to Profile Lounge</h1>
+    <p class="lead">A place to create and manage your online profile</p>
+    <hr class="my-4">
+    <p>Create an account or log in to manage your profile.</p>
+    {% if not user.is_authenticated %}
+    <div class="mt-4">
+        <a class="btn btn-primary btn-lg me-2" href="{% url 'register' %}" role="button">Register</a>
+        <a class="btn btn-outline-primary btn-lg" href="{% url 'login' %}" role="button">Login</a>
+    </div>
+    {% else %}
+    <div class="mt-4">
+        <a class="btn btn-primary btn-lg" href="{% url 'dashboard' %}" role="button">Go to Dashboard</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
