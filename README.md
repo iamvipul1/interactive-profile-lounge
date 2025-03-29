@@ -1,69 +1,72 @@
-# Welcome to your Lovable project
 
-## Project info
+# Profile Lounge
 
-**URL**: https://lovable.dev/projects/0fa70abf-d827-49be-9c34-9536dbea9b40
+A modern web application for user profiles with authentication, built with React and Django.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- **User Authentication**: Register, login, and logout functionality
+- **User Profile**: Personal dashboard with profile photo and bio
+- **Modern UI**: Clean, responsive design with beautiful animations
+- **Full Stack**: React frontend with Django REST API backend
 
-**Use Lovable**
+## Tech Stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0fa70abf-d827-49be-9c34-9536dbea9b40) and start prompting.
+### Frontend
+- React with TypeScript
+- React Router for navigation
+- Tailwind CSS for styling
+- shadcn/ui components
+- React Query for data fetching
 
-Changes made via Lovable will be committed automatically to this repo.
+### Backend
+- Django
+- Django REST Framework
+- SQLite database
 
-**Use your preferred IDE**
+## Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Running the Frontend
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The frontend will be available at http://localhost:8080
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Running the Backend
 
-**Use GitHub Codespaces**
+Navigate to the server directory:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sh
+cd src/server
+```
 
-## What technologies are used for this project?
+Follow the instructions in the server README.md file to set up and run the Django backend.
 
-This project is built with .
+## Project Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- `/src/components`: React components
+- `/src/pages`: Page components for different routes
+- `/src/context`: React context providers
+- `/src/services`: API service functions
+- `/src/server`: Django backend application
 
-## How can I deploy this project?
+## Screenshots
 
-Simply open [Lovable](https://lovable.dev/projects/0fa70abf-d827-49be-9c34-9536dbea9b40) and click on Share -> Publish.
+(Add screenshots here once the application is running)
 
-## I want to use a custom domain - is that possible?
+## Development Workflow
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+1. Start both the frontend and backend servers
+2. Register a new user account
+3. Log in to access the dashboard
+4. Update your profile information
+
+## License
+
+MIT
